@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AccessControl.Repository
+namespace AccessControl.Interface
 {
     public interface IPessoaRepository
     {
