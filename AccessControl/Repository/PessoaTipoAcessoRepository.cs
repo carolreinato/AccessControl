@@ -94,14 +94,6 @@ namespace AccessControl.Repository
                     InCondominio = false
                 };
 
-                //cartão de acesso
-                //CodigoAcesso codigoAcesso = new CodigoAcesso
-                //{
-                //    //Id = db.CodigoAcesso.Where(x => x.Id == pessoaTipoAcesso.IdCodigoAcesso).FirstOrDefault().Id,
-                //    EmUso = false
-                //};
-                //db.CodigoAcesso.Update(codigoAcesso);
-
                 var local = db.Set<PessoaTipoAcesso>()
                     .Local
                     .FirstOrDefault(entry => entry.Id.Equals(idPessoaTipoAcesso));

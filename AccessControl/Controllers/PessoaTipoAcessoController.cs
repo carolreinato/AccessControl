@@ -92,7 +92,6 @@ namespace AccessControl.Controllers
         }
 
         [HttpPut("UpdatePessoaTipoAcesso")]
-        //[Route("UpdatePessoaTipoAcesso")]
         public async Task<IActionResult> UpdatePessoaTipoAcesso(int idPessoaTipoAcesso)
         {
             if (ModelState.IsValid)

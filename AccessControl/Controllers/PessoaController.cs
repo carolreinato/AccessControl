@@ -92,31 +92,5 @@ namespace AccessControl.Controllers
 
             return BadRequest();
         }
-
-        //[HttpPost]
-        //[Route("UpdatePessoa")]
-        //public async Task<IActionResult> UpdatePessoa([FromBody]Pessoa model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            await pessoaRepository.UpdatePessoa(model);
-
-        //            return Ok();
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
-        //            {
-        //                return NotFound();
-        //            }
-
-        //            return BadRequest();
-        //        }
-        //    }
-
-        //    return BadRequest();
-        //}
     }
 }

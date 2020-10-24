@@ -25,6 +25,7 @@ namespace AccessControl
             services.AddDbContext<AccessControlContext>(item => item.UseSqlServer(Configuration.GetConnectionString("AccessControlConnection")));
             services.AddScoped<IPessoaRepository, PessoaRepository>();
             services.AddScoped<IPessoaTipoAcessoRepository, PessoaTipoAcessoRepository>();
+            services.AddScoped<ICodigoAcessoRepository, CodigoAcessoRepository>();
             services.AddMvc();
         }
 
