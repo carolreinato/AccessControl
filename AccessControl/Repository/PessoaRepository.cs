@@ -69,25 +69,16 @@ namespace AccessControl.Repository
             return null;
         }
 
-        public async Task<List<PessoaTipoAcesso>> GetPessoaTipoAcesso()
-        {
-            if (db != null)
-            {
-                return await db.PessoaTipoAcesso.ToListAsync();
-            }
-            return null;
-        }
+        //public async Task UpdatePessoa(Pessoa pessoa)
+        //{
+        //    if (db != null)
+        //    {
+        //        //Deleta a pessoa
+        //        db.Pessoa.Update(pessoa);
 
-        public async Task UpdatePessoa(Pessoa pessoa)
-        {
-            if (db != null)
-            {
-                //Deleta a pessoa
-                db.Pessoa.Update(pessoa);
-
-                //Comita a transação
-                await db.SaveChangesAsync();
-            }
-        }
+        //        //Comita a transação
+        //        await db.SaveChangesAsync();
+        //    }
+        //}
     }
 }

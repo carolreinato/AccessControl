@@ -9,14 +9,12 @@ namespace AccessControl.Repository
 {
     public interface IPessoaRepository
     {
-        Task<List<PessoaTipoAcesso>> GetPessoaTipoAcesso();
-
         Task<List<PessoaViewModel>> GetPessoas();
 
         Task<PessoaViewModel> GetPessoa(string cpf);
 
         Task<int> AddPessoa(string nome, string cpf, string telefone);
 
-        Task UpdatePessoa(Pessoa pessoa);
+        //Task UpdatePessoa(Pessoa pessoa);
     }
 }

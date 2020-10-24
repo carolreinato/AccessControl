@@ -1,12 +1,9 @@
-﻿using System;
+﻿using AccessControl.Repository;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AccessControl;
-using AccessControl.Models;
 
 namespace AccessControl.Controllers
 {
@@ -14,81 +11,110 @@ namespace AccessControl.Controllers
     [ApiController]
     public class PessoaTipoAcessoController : ControllerBase
     {
-        private readonly AccessControlContext _context;
-
-        public PessoaTipoAcessoController(AccessControlContext context)
+        private IPessoaTipoAcessoRepository pessoaTipoAcessoRepository;
+        public PessoaTipoAcessoController(IPessoaTipoAcessoRepository _pessoaTipoAcessoRepository)
         {
-            _context = context;
+            pessoaTipoAcessoRepository = _pessoaTipoAcessoRepository;
         }
 
-        // GET: api/PessoaTipoAcesso
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PessoaTipoAcesso>>> GetPessoaTipoAcesso()
+        [Route("GetPessoasTipoAcesso")]
+        public async Task<IActionResult> GetPessoasTipoAcesso()
         {
-            return await _context.PessoaTipoAcesso.ToListAsync();
-        }
-
-        // GET: api/PessoaTipoAcesso/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PessoaTipoAcesso>> GetPessoaTipoAcesso(int id)
-        {
-            var pessoaTipoAcesso = await _context.PessoaTipoAcesso.FindAsync(id);
-
-            if (pessoaTipoAcesso == null)
+            try
             {
-                return NotFound();
-            }
+                var pessoasTipoAcesso = await pessoaTipoAcessoRepository.GetPessoasTipoAcesso();
+                if (pessoasTipoAcesso == null)
+                {
+                    return NotFound();
+                }
 
-            return pessoaTipoAcesso;
+                return Ok(pessoasTipoAcesso);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
-        // PUT: api/PessoaTipoAcesso/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPessoaTipoAcesso(int id, PessoaTipoAcesso pessoaTipoAcesso)
+        [HttpGet]
+        [Route("GetPessoaTipoAcesso")]
+        public async Task<IActionResult> GetPessoaTipoAcesso(string cpf)
         {
-            if (id != pessoaTipoAcesso.Id)
+            if (cpf == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(pessoaTipoAcesso).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PessoaTipoAcessoExists(id))
+                var pessoaTipoAcesso = await pessoaTipoAcessoRepository.GetPessoaTipoAcesso(cpf);
+
+                if (pessoaTipoAcesso == null)
                 {
                     return NotFound();
                 }
-                else
+
+                return Ok(pessoaTipoAcesso);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("AddPessoaTipoAcesso")]
+        public async Task<IActionResult> AddPessoaTipoAcesso(int idPessoa, int idTipoAcesso, Guid idCodigoAcesso)
+        {
+            if (ModelState.IsValid)
+            {
+                try
                 {
-                    throw;
+                    var pessoaId = await pessoaTipoAcessoRepository.AddPessoaTipoAcesso(idPessoa,idTipoAcesso,idCodigoAcesso);
+                    if (pessoaId > 0)
+                    {
+                        return Ok(pessoaId);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+                catch (Exception)
+                {
+
+                    return BadRequest();
+                }
+
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPut("UpdatePessoaTipoAcesso")]
+        //[Route("UpdatePessoaTipoAcesso")]
+        public async Task<IActionResult> UpdatePessoaTipoAcesso(int idPessoaTipoAcesso)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await pessoaTipoAcessoRepository.UpdatePessoaTipoAcesso(idPessoaTipoAcesso);
+
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
+                    {
+                        return NotFound();
+                    }
+
+                    return BadRequest();
                 }
             }
 
-            return NoContent();
-        }
-
-        // POST: api/PessoaTipoAcesso
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<PessoaTipoAcesso>> PostPessoaTipoAcesso(PessoaTipoAcesso pessoaTipoAcesso)
-        {
-            _context.PessoaTipoAcesso.Add(pessoaTipoAcesso);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPessoaTipoAcesso", new { id = pessoaTipoAcesso.Id }, pessoaTipoAcesso);
-        }
-
-        private bool PessoaTipoAcessoExists(int id)
-        {
-            return _context.PessoaTipoAcesso.Any(e => e.Id == id);
+            return BadRequest();
         }
     }
 }
