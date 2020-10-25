@@ -1,4 +1,5 @@
-﻿using AccessControl.Models;
+﻿using AccessControl.Interface;
+using AccessControl.Models;
 using AccessControl.Repository;
 using AccessControl.ViewModel;
 using Microsoft.AspNetCore.Mvc;

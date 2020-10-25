@@ -1,4 +1,5 @@
-﻿using AccessControl.Repository;
+﻿using AccessControl.Interface;
+using AccessControl.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using AccessControl.Models;
 using AccessControl.Repository;
+using AccessControl.Interface;
 
 namespace AccessControl
 {
