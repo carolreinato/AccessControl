@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using AccessControl.Models;
 using AccessControl.Repository;
+using AccessControl.Interface;
 
 namespace AccessControl
 {
@@ -24,6 +25,8 @@ namespace AccessControl
             services.AddSwaggerGen();
             services.AddDbContext<AccessControlContext>(item => item.UseSqlServer(Configuration.GetConnectionString("AccessControlConnection")));
             services.AddScoped<IPessoaRepository, PessoaRepository>();
+            services.AddScoped<IPessoaTipoAcessoRepository, PessoaTipoAcessoRepository>();
+            services.AddScoped<ICodigoAcessoRepository, CodigoAcessoRepository>();
             services.AddMvc();
         }
 

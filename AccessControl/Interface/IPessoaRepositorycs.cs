@@ -5,18 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AccessControl.Repository
+namespace AccessControl.Interface
 {
     public interface IPessoaRepository
     {
-        Task<List<PessoaTipoAcesso>> GetPessoaTipoAcesso();
-
         Task<List<PessoaViewModel>> GetPessoas();
 
         Task<PessoaViewModel> GetPessoa(string cpf);
 
         Task<int> AddPessoa(string nome, string cpf, string telefone);
 
-        Task UpdatePessoa(Pessoa pessoa);
+        //Task UpdatePessoa(Pessoa pessoa);
     }
 }

@@ -1,4 +1,5 @@
-﻿using AccessControl.Models;
+﻿using AccessControl.Interface;
+using AccessControl.Models;
 using AccessControl.Repository;
 using AccessControl.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -13,31 +14,10 @@ namespace AccessControl.Controllers
     [ApiController]
     public class PessoaController : ControllerBase
     {
-        IPessoaRepository pessoaRepository;
+        private IPessoaRepository pessoaRepository;
         public PessoaController(IPessoaRepository _pessoaRepository)
         {
             pessoaRepository = _pessoaRepository;
-        }
-
-        [HttpGet]
-        [Route("GetPessoaTipoAcesso")]
-        public async Task<IActionResult> GetPessoaTipoAcesso()
-        {
-            try
-            {
-                var pessoaTipoAcessos = await pessoaRepository.GetPessoaTipoAcesso();
-                if (pessoaTipoAcessos == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(pessoaTipoAcessos);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-
         }
 
         [HttpGet]
@@ -87,7 +67,6 @@ namespace AccessControl.Controllers
         }
 
         [HttpPost("AddPessoa")]
-        //[Route("AddPessoa")]
         public async Task<IActionResult> AddPessoa(string nome, string cpf, string telefone)
         {
             if (ModelState.IsValid)
@@ -110,32 +89,6 @@ namespace AccessControl.Controllers
                     return BadRequest();
                 }
 
-            }
-
-            return BadRequest();
-        }
-
-        [HttpPost]
-        [Route("UpdatePessoa")]
-        public async Task<IActionResult> UpdatePessoa([FromBody]Pessoa model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await pessoaRepository.UpdatePessoa(model);
-
-                    return Ok();
-                }
-                catch (Exception ex)
-                {
-                    if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
-                    {
-                        return NotFound();
-                    }
-
-                    return BadRequest();
-                }
             }
 
             return BadRequest();

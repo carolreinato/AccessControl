@@ -10,27 +10,27 @@ namespace AccessControl.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PessoaTipoAcessoController : ControllerBase
+    public class CodigoAcessoController : ControllerBase
     {
-        private IPessoaTipoAcessoRepository pessoaTipoAcessoRepository;
-        public PessoaTipoAcessoController(IPessoaTipoAcessoRepository _pessoaTipoAcessoRepository)
+        private ICodigoAcessoRepository codigoAcessoRepository;
+        public CodigoAcessoController(ICodigoAcessoRepository _codigoAcessoRepository)
         {
-            pessoaTipoAcessoRepository = _pessoaTipoAcessoRepository;
+            codigoAcessoRepository = _codigoAcessoRepository;
         }
 
         [HttpGet]
-        [Route("GetPessoasTipoAcesso")]
-        public async Task<IActionResult> GetPessoasTipoAcesso()
+        [Route("GetCodigosAcesso")]
+        public async Task<IActionResult> GetCodigosAcesso()
         {
             try
             {
-                var pessoasTipoAcesso = await pessoaTipoAcessoRepository.GetPessoasTipoAcesso();
-                if (pessoasTipoAcesso == null)
+                var codigosAcesso = await codigoAcessoRepository.GetCodigosAcesso();
+                if (codigosAcesso == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(pessoasTipoAcesso);
+                return Ok(codigosAcesso);
             }
             catch (Exception)
             {
@@ -39,24 +39,18 @@ namespace AccessControl.Controllers
         }
 
         [HttpGet]
-        [Route("GetPessoaTipoAcesso")]
-        public async Task<IActionResult> GetPessoaTipoAcesso(string cpf)
+        [Route("GetCodigosAcessoLivres")]
+        public async Task<IActionResult> GetCodigosAcessoLivres()
         {
-            if (cpf == null)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                var pessoaTipoAcesso = await pessoaTipoAcessoRepository.GetPessoaTipoAcesso(cpf);
-
-                if (pessoaTipoAcesso == null)
+                var codigosAcessoLivre = await codigoAcessoRepository.GetCodigosAcessoLivres();
+                if (codigosAcessoLivre == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(pessoaTipoAcesso);
+                return Ok(codigosAcessoLivre);
             }
             catch (Exception)
             {
@@ -64,17 +58,43 @@ namespace AccessControl.Controllers
             }
         }
 
-        [HttpPost("AddPessoaTipoAcesso")]
-        public async Task<IActionResult> AddPessoaTipoAcesso(int idPessoa, int idTipoAcesso, Guid idCodigoAcesso)
+        [HttpGet]
+        [Route("GetCodigoAcesso")]
+        public async Task<IActionResult> GetCodigoAcesso(Guid id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var codigoAcesso = await codigoAcessoRepository.GetCodigoAcesso(id);
+
+                if (codigoAcesso == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(codigoAcesso);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("AddCodigoAcesso")]
+        public async Task<IActionResult> AddCodigoAcesso()
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var pessoaId = await pessoaTipoAcessoRepository.AddPessoaTipoAcesso(idPessoa,idTipoAcesso,idCodigoAcesso);
-                    if (pessoaId > 0)
+                    var codigo = await codigoAcessoRepository.AddCodigoAcesso();
+                    if (codigo > 0)
                     {
-                        return Ok(pessoaId);
+                        return Ok(codigo);
                     }
                     else
                     {
@@ -83,23 +103,20 @@ namespace AccessControl.Controllers
                 }
                 catch (Exception)
                 {
-
                     return BadRequest();
                 }
-
             }
-
             return BadRequest();
         }
 
-        [HttpPut("UpdatePessoaTipoAcesso")]
-        public async Task<IActionResult> UpdatePessoaTipoAcesso(int idPessoaTipoAcesso)
+        [HttpPut("UpdateCodigoAcesso")]
+        public async Task<IActionResult> UpdateCodigoAcesso(Guid id, bool status)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await pessoaTipoAcessoRepository.UpdatePessoaTipoAcesso(idPessoaTipoAcesso);
+                    await codigoAcessoRepository.UpdateCodigoAcesso(id, status);
 
                     return Ok();
                 }
